@@ -274,6 +274,59 @@ main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
 .copy{margin-top:10px;width:100%;font-size:9px;padding:11px}
 .copy.done{color:#0a0612;background:#39ff14;border-color:#39ff14}
 .prev{margin-top:8px;font-size:14px;color:var(--dim)}.prev a{color:var(--pink);text-decoration:underline}
+
+/* ---------- Discord lobby ---------- */
+.lobby{margin:12px 2px 0;padding:10px 12px;border-radius:12px;background:rgba(88,101,242,.12);border:1px solid rgba(88,101,242,.45);display:none}
+.lobby.on{display:block;animation:rise .5s forwards}
+.lobby .top{display:flex;align-items:center;gap:8px;font-family:var(--px);font-size:8px;color:#aab3ff;letter-spacing:1px}
+.lobby .top .dot{width:8px;height:8px;border-radius:50%;background:#39ff14;box-shadow:0 0 8px #39ff14;animation:led 1.6s steps(2) infinite}
+.lobby .top b{color:var(--white);font-weight:400}
+.lobby .faces{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.lobby .faces span{position:relative;width:30px;height:30px}
+.lobby .faces img{width:30px;height:30px;border-radius:50%;box-shadow:0 0 0 2px #5865f2,0 0 10px -2px #5865f2;background:#1a0a2a}
+.lobby .faces span::after{content:"";position:absolute;right:-1px;bottom:-1px;width:9px;height:9px;border-radius:50%;border:2px solid var(--bg);background:var(--st,#39ff14)}
+.lobby .faces .more{display:grid;place-items:center;font-family:var(--px);font-size:7px;color:var(--dim);border-radius:50%;box-shadow:0 0 0 1px var(--line)}
+.lobby .cta{margin-top:9px;font-size:14px;color:var(--dim)}.lobby .cta a{color:#aab3ff;text-decoration:underline}
+
+/* ---------- Twitch LIVE takeover ---------- */
+.live{display:none;margin:4px 0 14px;border-radius:14px;overflow:hidden;border:1px solid #ff3355;box-shadow:0 0 30px -6px #ff3355;background:#0b0610}
+.live.on{display:block;animation:rise .5s forwards}
+.live .bar{display:flex;align-items:center;gap:10px;padding:10px 12px;font-family:var(--px);font-size:9px;color:#fff;
+  background:linear-gradient(90deg,#ff3355,#a64dff);letter-spacing:1px}
+.live .bar .rec{width:10px;height:10px;border-radius:50%;background:#fff;animation:led 1s steps(2) infinite}
+.live .bar span:last-child{margin-left:auto;font-size:7px;opacity:.9}
+.live .frame{position:relative;aspect-ratio:16/9}
+.live iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+body.is-live .tag{color:#ff3355;text-shadow:0 0 10px #ff3355}
+.btn.tw .livepill{display:none;margin-left:6px;font-family:var(--px);font-size:7px;padding:3px 5px;border-radius:4px;background:#ff3355;color:#fff;vertical-align:middle;animation:led 1s steps(2) infinite}
+body.is-live .btn.tw .livepill{display:inline-block}
+
+/* ---------- daily quest + streak ---------- */
+.quest{margin:12px 2px 0;display:flex;gap:12px;align-items:center;padding:11px 12px;border-radius:12px;background:rgba(255,210,59,.07);border:1px solid rgba(255,210,59,.35)}
+.quest .sc{flex:none;font-size:22px;filter:drop-shadow(0 0 6px var(--gold))}
+.quest .k{font-family:var(--px);font-size:7px;color:var(--gold);letter-spacing:1px}
+.quest .n{font-weight:700;font-size:17px;margin-top:3px}
+.quest .pbar{height:6px;border-radius:3px;background:rgba(0,0,0,.4);margin-top:6px;overflow:hidden}
+.quest .pbar i{display:block;height:100%;width:0;background:var(--gold);box-shadow:0 0 8px var(--gold);transition:width .6s}
+.quest.done{border-color:#39ff14;background:rgba(57,255,20,.07)}.quest.done .k{color:#39ff14}.quest.done .pbar i{background:#39ff14}
+.quest .resets{font-size:12px;color:var(--dim);margin-top:4px}
+#streak{color:var(--gold)}
+
+/* ---------- arcade ---------- */
+.arcade{margin-top:26px;border-radius:14px;padding:14px;text-align:center;background:linear-gradient(160deg,rgba(255,43,214,.12),rgba(0,229,255,.08));border:1px solid var(--line);opacity:0;transform:translateY(18px)}
+.ready .arcade{animation:rise .6s .6s cubic-bezier(.2,.9,.2,1) forwards}
+.arcade h2{font-family:var(--px);font-size:10px;color:var(--pink);letter-spacing:2px;text-shadow:0 0 8px var(--pink)}
+.arcade .title{font-family:var(--script);font-size:34px;margin:8px 0 2px;text-shadow:0 0 14px rgba(255,43,214,.7)}
+.arcade p{font-size:14px;color:var(--dim)}
+.arcade .best{font-family:var(--px);font-size:8px;color:var(--gold);margin-top:8px}
+.arcade .play{margin-top:12px;width:100%;padding:13px;font-size:10px;color:#0a0612;background:var(--pink);border-color:var(--pink);box-shadow:0 0 20px -4px var(--pink)}
+#game{position:fixed;inset:0;z-index:70;background:rgba(5,3,9,.94);display:none;flex-direction:column;align-items:center;justify-content:center;padding:12px;touch-action:none}
+#game.open{display:flex}
+#game .hud2{width:min(100%,420px);display:flex;justify-content:space-between;font-family:var(--px);font-size:9px;color:var(--white);margin-bottom:8px}
+#game .hud2 b{color:var(--gold);font-weight:400}
+#gcv{width:min(100%,420px);aspect-ratio:2/3;max-height:calc(100svh - 150px);image-rendering:pixelated;border:2px solid var(--pink);border-radius:10px;box-shadow:0 0 30px -6px var(--pink);background:#0a0612;touch-action:none}
+#game .gbtns{display:flex;gap:8px;margin-top:10px;width:min(100%,420px)}
+#game .gbtns button{flex:1}
 @media (prefers-reduced-motion:reduce){#nl-badge-frame{animation:none!important}.badge-glow{animation:none}}
 @media (prefers-reduced-motion:reduce){
   *,*::before{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -295,12 +348,18 @@ main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
 <header class="hud">
   <div class="p1">P1 <b>MADDERA</b></div>
   <div class="right">
-    <button class="chip" id="trophyBtn" aria-label="Achievements">🏆 <span id="trophyCount">0/13</span></button>
+    <span class="chip" id="streak" title="Daily visit streak">🔥 1</span>
+    <button class="chip" id="trophyBtn" aria-label="Achievements">🏆 <span id="trophyCount">0/18</span></button>
     <button class="chip" id="sfxBtn" aria-pressed="false" aria-label="Sound effects">SFX <span id="sfxState">OFF</span></button>
   </div>
 </header>
 
 <main id="main">
+  <section class="live" id="liveBox" aria-live="polite">
+    <div class="bar"><span class="rec"></span><span>LIVE NOW ON TWITCH</span><span>4NGEDELAMORT</span></div>
+    <div class="frame" id="liveFrame"></div>
+  </section>
+
   <section class="stage">
     <div class="hero" id="hero">
       <div class="avatar">
@@ -343,6 +402,12 @@ main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
     </div>
   </section>
 
+  <div class="quest" id="quest">
+    <span class="sc">📜</span>
+    <div style="flex:1;min-width:0"><div class="k" id="questK">DAILY QUEST</div><div class="n" id="questN">…</div>
+      <div class="pbar"><i id="questBar"></i></div><div class="resets" id="questR"></div></div>
+  </div>
+
   <div class="xp" aria-label="Your progress"><span>XP</span><div class="track"><div class="fill" id="xpFill"></div></div><span id="xpTxt">0%</span></div>
 
   <h1 class="menu-title">SELECT YOUR PLATFORM</h1>
@@ -365,7 +430,7 @@ main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
     <li class="item"><a class="btn tw" data-ach="tw" href="https://www.twitch.tv/4ngedelamort" target="_blank" rel="noopener">
       <span class="cursor">▶</span>
       <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 3h16v11l-5 5h-4l-3 3v-3H4z"/><path d="M11 7.5v4M16 7.5v4"/></svg></span>
-      <span class="txt"><span class="t">Twitch</span><span class="s">4ngeDeLaMort · live streams</span></span>
+      <span class="txt"><span class="t">Twitch<span class="livepill">LIVE</span></span><span class="s">4ngeDeLaMort · live streams</span></span>
       <span class="key">Y</span></a></li>
     <li class="item"><a class="btn dc" data-ach="dc" href="https://discord.gg/6hdA3UTnNy" target="_blank" rel="noopener">
       <span class="cursor">▶</span>
@@ -383,6 +448,11 @@ main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
       <span class="txt"><span class="t">Facebook</span><span class="s">Gianni Madera</span></span>
       <span class="key sh">R</span></a></li>
   </ul>
+  <div class="lobby" id="lobby">
+    <div class="top"><span class="dot"></span><span>DISCORD LOBBY · <b id="lobbyN">0</b> ONLINE</span></div>
+    <div class="faces" id="lobbyFaces"></div>
+    <div class="cta">Swift Syndicate is live right now. <a href="https://discord.gg/6hdA3UTnNy" target="_blank" rel="noopener" data-ach="dc" id="lobbyJoin">Jump in</a></div>
+  </div>
 
   <section class="np" aria-label="Now playing">
     <h2><span class="eq"><i></i><i></i><i></i><i></i></span> NOW PLAYING</h2>
@@ -422,6 +492,14 @@ main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
     <div class="qr" id="qr"><img id="qrImg" alt="Cash App QR code for $MaddERA" width="180" height="180"><p>CASH APP · $MADDERA</p></div>
   </section>
 
+  <section class="arcade" aria-label="Mini game">
+    <h2>🕹️ ARCADE</h2>
+    <div class="title">Money Flip</div>
+    <p>20 seconds. Catch the MaddEra bills, dodge the hollows.</p>
+    <div class="best">BEST: <span id="bestScore">0</span></div>
+    <button class="chip play" id="playBtn">▶ PLAY</button>
+  </section>
+
   <section class="share" aria-label="Share links">
     <h2>🔗 SHARE THE ERA</h2>
     <p class="hint">Custom-text links for bios, posts and forums. Pick a format, tap copy.</p>
@@ -440,12 +518,17 @@ main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
   <span class="led"></span>
   <div class="cell"><span>SERVER</span><b class="ok">ONLINE</b></div>
   <div class="cell"><span>PING</span><b id="ping">--</b></div>
-  <div class="cell hide-s"><span>PLAYER</span><b>P1</b></div>
+  <div class="cell" id="onlineCell"><span>DISCORD</span><b id="onlineN" class="ok">--</b></div>
   <div class="grow"></div>
   <div class="cart"></div>
 </div>
 
 <canvas id="rain" class="layer"></canvas>
+<div id="game" role="dialog" aria-modal="true" aria-label="Money Flip game">
+  <div class="hud2"><span>SCORE <b id="gScore">0</b></span><span>♥ <b id="gLives">3</b></span><span>TIME <b id="gTime">20</b></span></div>
+  <canvas id="gcv" width="160" height="240"></canvas>
+  <div class="gbtns"><button class="chip" id="gShare" hidden>📣 SHARE SCORE</button><button class="chip" id="gAgain" hidden>↻ AGAIN</button><button class="chip" id="gExit">✕ EXIT</button></div>
+</div>
 <div id="toasts" aria-live="polite"></div>
 <div id="trophies" role="dialog" aria-modal="true" aria-label="Achievements">
   <div class="box"><h3>🏆 ACHIEVEMENTS</h3><ul id="trophyList"></ul><button class="chip close" id="trophyClose">CLOSE</button></div>
@@ -503,6 +586,11 @@ main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
     ["tw", "🟣", "Raid Party", "Opened Twitch"],
     ["dc", "💬", "Syndicate", "Joined the Discord"],
     ["share", "📣", "Hype Man", "Copied a share link"],
+    ["live", "📡", "Front Row", "Caught MaddEra live"],
+    ["quest", "📜", "Quest Giver", "Finished a daily quest"],
+    ["arcade", "🕹️", "Arcade Rat", "Played Money Flip"],
+    ["score500", "💰", "High Roller", "Scored 500+ in Money Flip"],
+    ["streak3", "🔥", "On Fire", "3-day visit streak"],
     ["loot", "🧰", "Loot Hunter", "Opened the loot chest"],
     ["coin", "🪙", "Coin Op", "Inserted a coin"],
     ["play", "🎧", "Don't Panic", "Pressed play on the track"],
@@ -520,6 +608,7 @@ main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
   let touched = false;
   addEventListener("pointerdown", () => { touched = true; }, { once: true, capture: true });
   function unlock(id) {
+    questEvent(id);
     if (got.has(id)) return; got.add(id); store.set("ach", [...got]); renderProgress();
     const a = ACH.find(x => x[0] === id); if (!a) return;
     const el = document.createElement("div"); el.className = "toast";
@@ -639,6 +728,157 @@ main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
     setTimeout(() => { b.classList.remove("done"); b.textContent = "⧉ COPY"; }, 1400);
   });
   renderSnip();
+
+  /* ---------- daily quest + visit streak ---------- */
+  const today = (d => d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate())(new Date());
+  (function streak() {
+    const s = store.get("streak", { last: "", n: 0 });
+    const y = new Date(); y.setDate(y.getDate() - 1);
+    const yk = y.getFullYear() + "-" + (y.getMonth() + 1) + "-" + y.getDate();
+    if (s.last !== today) { s.n = s.last === yk ? s.n + 1 : 1; s.last = today; store.set("streak", s); }
+    $("#streak").textContent = "🔥 " + s.n;
+    if (s.n >= 3) setTimeout(() => unlock("streak3"), 3600);
+  })();
+  const QUESTS = [
+    { t: "Visit 2 platforms", ev: ["ig", "tt", "yt", "tw", "sc", "fb", "dc"], n: 2 },
+    { t: "Press play on Don't Panic", ev: ["play"], n: 1 },
+    { t: "Copy a share link", ev: ["share"], n: 1 },
+    { t: "Open the Loot Chest", ev: ["loot"], n: 1 },
+    { t: "Score 500+ in Money Flip", ev: ["score500"], n: 1 },
+    { t: "Join the Discord lobby", ev: ["dc"], n: 1 },
+    { t: "Play Money Flip 2 times", ev: ["arcade"], n: 2 }
+  ];
+  const dayNo = Math.floor(new Date(today.replace(/-(\d)\b/g, "-0$1")).getTime() / 864e5);
+  const Q = QUESTS[((dayNo % QUESTS.length) + QUESTS.length) % QUESTS.length];
+  let qs = store.get("quest", { day: "", c: 0, done: false });
+  if (qs.day !== today) qs = { day: today, c: 0, done: false };
+  function renderQuest() {
+    $("#questN").textContent = Q.t; $("#questBar").style.width = Math.min(100, qs.c / Q.n * 100) + "%";
+    $("#quest").classList.toggle("done", qs.done);
+    $("#questK").textContent = qs.done ? "DAILY QUEST COMPLETE ✓" : `DAILY QUEST · ${Math.min(qs.c, Q.n)}/${Q.n}`;
+    const m = new Date(); m.setHours(24, 0, 0, 0); const h = Math.ceil((m - new Date()) / 36e5);
+    $("#questR").textContent = qs.done ? `New quest in ${h}h. Keep your streak alive.` : `Resets in ${h}h`;
+  }
+  function questEvent(id) {
+    if (qs.done || !Q.ev.includes(id)) return;
+    qs.c++; if (qs.c >= Q.n) { qs.done = true; setTimeout(() => { unlock("quest"); SFX.trophy(); }, 400); }
+    store.set("quest", qs); renderQuest();
+  }
+  renderQuest();
+  $("#lobbyJoin").addEventListener("click", () => { SFX.select(); unlock("dc"); });
+
+  /* ---------- Discord live lobby (official server widget) ---------- */
+  const STATUS = { online: "#39ff14", idle: "#ffd23b", dnd: "#ff3355" };
+  async function lobby() {
+    try {
+      const r = await fetch("https://discord.com/api/guilds/1261324691688132729/widget.json", { cache: "no-store" });
+      if (!r.ok) throw 0; const d = await r.json(); const n = d.presence_count || 0;
+      $("#onlineN").textContent = n + " ON"; $("#lobbyN").textContent = n;
+      const show = (d.members || []).slice(0, 12);
+      $("#lobbyFaces").innerHTML = show.map(m => `<span style="--st:${STATUS[m.status] || "#39ff14"}" title="${String(m.username).replace(/[<>&"]/g, "")}"><img src="${m.avatar_url}" alt="" width="30" height="30" loading="lazy" referrerpolicy="no-referrer"></span>`).join("")
+        + (n > show.length ? `<span class="more">+${n - show.length}</span>` : "");
+      $("#lobby").classList.toggle("on", n > 0);
+    } catch { $("#onlineN").textContent = "--"; $("#lobby").classList.remove("on"); }
+  }
+  lobby(); setInterval(lobby, 60000);
+
+  /* ---------- Twitch LIVE takeover ---------- */
+  let isLive = false;
+  async function liveCheck() {
+    try {
+      const r = await fetch("https://decapi.me/twitch/uptime/4ngedelamort", { cache: "no-store" });
+      const s = (await r.text()).toLowerCase(); const live = r.ok && s && !s.includes("offline") && !s.includes("error");
+      if (live === isLive) return; isLive = live;
+      document.body.classList.toggle("is-live", live); $("#liveBox").classList.toggle("on", live);
+      $(".tag").textContent = live ? "● LIVE NOW ON TWITCH" : "ANGE DE LA MORT";
+      if (live) {
+        $("#liveFrame").innerHTML = `<iframe title="4ngeDeLaMort live on Twitch" allowfullscreen
+          src="https://player.twitch.tv/?channel=4ngedelamort&parent=${location.hostname}&muted=true&autoplay=true"></iframe>`;
+        setTimeout(() => unlock("live"), 2500); SFX.coin();
+      } else $("#liveFrame").innerHTML = "";
+    } catch {}
+  }
+  liveCheck(); setInterval(liveCheck, 120000);
+
+  /* ---------- Money Flip mini-game ---------- */
+  const GM = $("#game"), cv = $("#gcv"), gx = cv.getContext("2d"); gx.imageSmoothingEnabled = false;
+  const GW = 160, GH = 240; let best = store.get("best", 0); $("#bestScore").textContent = best;
+  let st = null, raf = 0, keys = {};
+  function newGame() {
+    st = { t0: performance.now(), last: performance.now(), score: 0, lives: 3, px: GW / 2, items: [], pops: [], shake: 0, spawn: 0, over: false, plays: 0 };
+    $("#gShare").hidden = $("#gAgain").hidden = true; SFX.start(); unlock("arcade"); loopG(performance.now());
+  }
+  function spawn(el) {
+    const lvl = 1 + el / 8, r = Math.random();
+    const kind = r < .14 * lvl ? "bullet" : r < .2 + .1 * lvl && r > .9 ? "coin" : r > .93 ? "coin" : "bill";
+    st.items.push({ k: kind, x: 8 + Math.random() * (GW - 16), y: -10, vy: (kind === "bullet" ? 70 : 42) * (0.8 + lvl * .35) * (0.8 + Math.random() * .4), r: Math.random() * 6 });
+  }
+  function drawPlayer(x) {
+    const y = GH - 18;
+    gx.fillStyle = "#00e5ff"; gx.fillRect(x - 9, y - 9, 18, 2); gx.fillStyle = "#06030a"; gx.fillRect(x - 6, y - 9, 12, 1);   // halo
+    gx.fillStyle = "#ff2bd6"; gx.fillRect(x - 12, y, 24, 6); gx.fillStyle = "#fff4fd"; gx.fillRect(x - 10, y + 1, 20, 1);    // tray
+    gx.fillStyle = "#ff2bd6"; [[-8, -4], [-4, -6], [0, -4], [4, -6], [8, -4]].forEach(([dx, h]) => gx.fillRect(x + dx - 1, y + h, 2, -h));   // "M" fingers
+  }
+  function loopG(now) {
+    if (!st) return;
+    const dt = Math.min(.05, (now - st.last) / 1000); st.last = now; const el = (now - st.t0) / 1000, left = Math.max(0, 20 - el);
+    if (!st.over) {
+      if (keys.ArrowLeft) st.px -= 140 * dt; if (keys.ArrowRight) st.px += 140 * dt;
+      st.px = Math.max(12, Math.min(GW - 12, st.px));
+      st.spawn -= dt; if (st.spawn <= 0) { spawn(el); st.spawn = Math.max(.18, .55 - el * .018); }
+      for (const it of st.items) {
+        it.y += it.vy * dt; it.r += dt * 3;
+        if (!it.hit && it.y > GH - 24 && it.y < GH - 10 && Math.abs(it.x - st.px) < 15) {
+          it.hit = true;
+          if (it.k === "bullet") { st.lives--; st.shake = .25; SFX.buzz(); st.pops.push({ x: it.x, y: it.y, s: "-♥", c: "#ff3355", t: 0 }); }
+          else { const v = it.k === "coin" ? 250 : 100; st.score += v; (it.k === "coin" ? SFX.coin : SFX.blip)(); st.pops.push({ x: it.x, y: it.y, s: "+" + v, c: it.k === "coin" ? "#ffd23b" : "#3ce696", t: 0 }); }
+        }
+      }
+      st.items = st.items.filter(i => !i.hit && i.y < GH + 12);
+      if (left <= 0 || st.lives <= 0) endGame();
+    }
+    // draw
+    gx.save(); if (st.shake > 0) { st.shake -= dt; gx.translate((Math.random() - .5) * 4, (Math.random() - .5) * 4); }
+    gx.fillStyle = "#0a0612"; gx.fillRect(0, 0, GW, GH);
+    gx.strokeStyle = "rgba(255,43,214,.35)"; gx.lineWidth = 1;
+    for (let i = 0; i < 8; i++) { const yy = 150 + (i + (el * .6) % 1) ** 2 * 1.6; gx.beginPath(); gx.moveTo(0, yy); gx.lineTo(GW, yy); gx.stroke(); }
+    for (const it of st.items) {
+      if (it.k === "bill") gx.drawImage(BILL, Math.round(it.x - 9), Math.round(it.y - 4), 18, 9);
+      else if (it.k === "coin") { gx.fillStyle = "#ffd23b"; gx.fillRect(it.x - 4, it.y - 4, 8, 8); gx.fillStyle = "#fff6b0"; gx.fillRect(it.x - 2, it.y - 3, 2, 3); }
+      else { gx.fillStyle = "#ffd23b"; gx.fillRect(it.x - 1, it.y - 5, 3, 3); gx.fillStyle = "#c9c9c9"; gx.fillRect(it.x - 1, it.y - 2, 3, 6); gx.fillStyle = "#ff3355"; gx.fillRect(it.x - 1, it.y - 9, 3, 3); }
+    }
+    drawPlayer(Math.round(st.px));
+    gx.font = '8px "Press Start 2P"'; gx.textAlign = "center";
+    for (const p of st.pops) { p.t += dt; gx.globalAlpha = Math.max(0, 1 - p.t); gx.fillStyle = p.c; gx.fillText(p.s, p.x, p.y - p.t * 30); }
+    gx.globalAlpha = 1; st.pops = st.pops.filter(p => p.t < 1);
+    if (st.over) {
+      gx.fillStyle = "rgba(5,3,9,.75)"; gx.fillRect(0, 70, GW, 100); gx.fillStyle = "#ff2bd6"; gx.font = '10px "Press Start 2P"'; gx.fillText("GAME OVER", GW / 2, 98);
+      gx.fillStyle = "#fff4fd"; gx.font = '8px "Press Start 2P"'; gx.fillText("SCORE " + st.score, GW / 2, 122);
+      gx.fillStyle = "#ffd23b"; gx.fillText(st.score >= best ? "NEW BEST!" : "BEST " + best, GW / 2, 144);
+    }
+    gx.restore();
+    $("#gScore").textContent = st.score; $("#gLives").textContent = Math.max(0, st.lives); $("#gTime").textContent = Math.ceil(left);
+    if (!st.over || st.pops.length) raf = requestAnimationFrame(loopG);
+  }
+  function endGame() {
+    st.over = true; if (st.score > best) { best = st.score; store.set("best", best); $("#bestScore").textContent = best; }
+    if (st.score >= 500) unlock("score500"); SFX.trophy();
+    $("#gShare").hidden = $("#gAgain").hidden = false;
+    setTimeout(() => { if (st && st.over) loopG(performance.now()); }, 50);
+  }
+  function moveTo(e) { if (!st) return; const r = cv.getBoundingClientRect(); st.px = (e.clientX - r.left) / r.width * GW; }
+  cv.addEventListener("pointerdown", e => { moveTo(e); cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener("pointermove", e => { if (e.buttons || e.pointerType === "mouse") moveTo(e); });
+  addEventListener("keydown", e => { if (GM.classList.contains("open") && (e.key === "ArrowLeft" || e.key === "ArrowRight")) { keys[e.key] = true; e.preventDefault(); } });
+  addEventListener("keyup", e => { keys[e.key] = false; });
+  $("#playBtn").addEventListener("click", () => { GM.classList.add("open"); newGame(); });
+  $("#gAgain").addEventListener("click", () => { cancelAnimationFrame(raf); newGame(); });
+  $("#gExit").addEventListener("click", () => { cancelAnimationFrame(raf); st = null; GM.classList.remove("open"); });
+  $("#gShare").addEventListener("click", async () => {
+    const txt = `I scored ${st ? st.score : best} in MONEY FLIP 💸 on MaddEra's site. Beat me: https://maddera.netlify.app`;
+    try { if (navigator.share) await navigator.share({ text: txt }); else { await navigator.clipboard.writeText(txt); $("#gShare").textContent = "✓ COPIED"; } } catch {}
+    unlock("share");
+  });
 
   /* ---------- SoundCloud widget: unlock on play ---------- */
   const s = document.createElement("script"); s.src = "https://w.soundcloud.com/player/api.js"; s.async = true;
