@@ -232,18 +232,33 @@ footer .coin-txt{color:var(--gold);animation:blink 1.4s steps(1) infinite}
 .statusbar .cell b{color:var(--white);font-weight:400;font-size:8px}
 .statusbar .cell b.ok{color:#39ff14}
 .statusbar .grow{flex:1}
-.cart{position:relative;flex:none;width:213px;height:var(--bar);display:none}
+.cart{position:relative;flex:none;width:200px;height:var(--bar);display:none}
 .has-badge .cart{display:block}
-.cart::before{content:"CARTRIDGE";position:absolute;left:8px;top:3px;font-size:5px;color:var(--cyan);opacity:.7}
-.cart::after{content:"";position:absolute;inset:6px 0 2px 0;border:1px dashed rgba(0,229,255,.35);border-radius:10px 10px 4px 4px;
-  background:repeating-linear-gradient(90deg,rgba(0,229,255,.06) 0 3px,transparent 3px 7px)}
-#nl-badge-frame{border-radius:12px!important;box-shadow:0 0 0 1px rgba(0,229,255,.55),0 0 18px -2px rgba(0,229,255,.55),0 0 34px -8px rgba(255,43,214,.6)!important;
-  animation:cartGlow 3.2s ease-in-out infinite}
-@keyframes cartGlow{50%{box-shadow:0 0 0 1px rgba(255,43,214,.6),0 0 22px -2px rgba(255,43,214,.55),0 0 34px -8px rgba(0,229,255,.6)}}
+.cart::before{content:"\25C6  GAME ENGINE";position:absolute;left:22px;top:6px;font-size:6px;letter-spacing:2px;color:var(--dim);opacity:.85;z-index:1}
+.cart::after{content:"";position:absolute;left:4px;top:-4px;width:1px;height:calc(var(--bar) - 8px);margin-top:8px;
+  background:linear-gradient(to bottom,transparent,rgba(0,229,255,.55),transparent)}
+.badge-glow{position:fixed;right:12px;bottom:6px;width:170px;height:40px;z-index:26;pointer-events:none;display:none;border-radius:20px;
+  background:radial-gradient(60% 70% at 50% 55%,rgba(255,43,214,.32),transparent 70%);filter:blur(6px);animation:glowShift 4s ease-in-out infinite}
+.has-badge .badge-glow{display:block}
+@keyframes glowShift{50%{background:radial-gradient(60% 70% at 50% 55%,rgba(0,229,255,.30),transparent 70%)}}
+/* Netlify's own badge, untouched in size and position: its dark pill is blended into the bar
+   and its text recoloured to the MaddEra neon, cycling pink <-> cyan with a neon-sign flicker. */
+#nl-badge-frame{mix-blend-mode:screen!important;box-shadow:none!important;
+  filter:grayscale(1) contrast(4) brightness(.95) sepia(1) saturate(7) hue-rotate(265deg)!important;
+  animation:badgeNeon 8s linear infinite!important;transition:opacity .2s}
+#nl-badge-frame:hover{animation-play-state:paused!important;opacity:1}
+@keyframes badgeNeon{
+  0%,100%{filter:grayscale(1) contrast(4) brightness(.95) sepia(1) saturate(7) hue-rotate(265deg)}
+  45%{filter:grayscale(1) contrast(3.2) brightness(.92) sepia(1) saturate(5) hue-rotate(140deg)}
+  50%{filter:grayscale(1) contrast(3.2) brightness(.5) sepia(1) saturate(5) hue-rotate(140deg)}
+  52%{filter:grayscale(1) contrast(3.2) brightness(.95) sepia(1) saturate(5) hue-rotate(140deg)}
+  54%{filter:grayscale(1) contrast(3.2) brightness(.55) sepia(1) saturate(5) hue-rotate(140deg)}
+  56%{filter:grayscale(1) contrast(3.2) brightness(.95) sepia(1) saturate(5) hue-rotate(140deg)}}
 main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
 #toasts{bottom:calc(var(--bar) + 14px + env(safe-area-inset-bottom))!important}
 @media (max-width:420px){.statusbar .hide-s{display:none}.cart{width:205px}}
 
+@media (prefers-reduced-motion:reduce){#nl-badge-frame{animation:none!important}.badge-glow{animation:none}}
 @media (prefers-reduced-motion:reduce){
   *,*::before{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
   .sign .word.front{stroke-dashoffset:0}
@@ -389,6 +404,7 @@ main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
   <footer><span class="coin-txt">INSERT COIN</span><br>© MADDERA · ENTER THE ERA</footer>
 </main>
 
+<div class="badge-glow" aria-hidden="true"></div>
 <div class="statusbar" id="statusbar" aria-hidden="true">
   <span class="led"></span>
   <div class="cell"><span>SERVER</span><b class="ok">ONLINE</b></div>
@@ -508,7 +524,7 @@ main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
   });
 
   /* ---------- item shop ---------- */
-  const WISHLIST = "";   // paste the public Amazon wishlist share link here
+  const WISHLIST = "https://www.amazon.com/hz/wishlist/ls/2ZZEGUDWQ3SBD";   // paste the public Amazon wishlist share link here
   const CASHAPP = "https://cash.app/$MaddERA";
   const chest = $("#chestSlot"), coinBtn = $("#coinSlot");
   function sparks(el, n = 14) {
