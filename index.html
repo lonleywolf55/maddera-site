@@ -464,7 +464,7 @@ main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
   };
 
   /* ---------- sound (synthesised, off by default) ---------- */
-  let ac = null, sfx = store.get("sfx", false);
+  let ac = null, sfx = store.get("sfx", true);
   function ctx() { if (!ac) { try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch { ac = null; } } return ac; }
   function tone(f, d = .06, type = "square", vol = .05, when = 0, slide = 0) {
     if (!sfx) return; const a = ctx(); if (!a) return;
@@ -488,6 +488,8 @@ main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
     if (on && ctx() && ac.state === "suspended") ac.resume();
   }
   setSfx(sfx);
+  addEventListener("pointerdown", () => { if (sfx && ctx() && ac.state === "suspended") ac.resume(); }, { capture: true });
+  addEventListener("keydown", () => { if (sfx && ctx() && ac.state === "suspended") ac.resume(); }, { capture: true });
   $("#sfxBtn").addEventListener("click", () => { setSfx(!sfx); SFX.blip(); });
 
   /* ---------- achievements ---------- */
@@ -796,7 +798,6 @@ main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
     $("#start").hidden = true; select(0, false); btns[0].focus({ preventScroll: true });
     btns[0].scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
   });
-  if (sfx) $("#start").hidden = true;
 })();
 </script>
 </body>
