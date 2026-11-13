@@ -175,7 +175,74 @@ main{position:relative;z-index:10;max-width:480px;margin:0 auto;padding:calc(64p
 #trophies .close{margin-top:14px;width:100%}
 
 footer{text-align:center;margin-top:30px;font-family:var(--px);font-size:8px;color:var(--dim);line-height:2}
-footer .coin{color:var(--gold);animation:blink 1.4s steps(1) infinite}
+footer .coin-txt{color:var(--gold);animation:blink 1.4s steps(1) infinite}
+
+.tt{--c1:#00f2ea;--c2:#ff2bd6}.tw{--c1:#a64dff;--c2:#00e5ff}
+.key.sh{width:38px;border-radius:9px;font-size:9px}
+
+/* ---------- item shop ---------- */
+.shop{margin-top:28px;opacity:0;transform:translateY(18px)}
+.ready .shop{animation:rise .6s .55s cubic-bezier(.2,.9,.2,1) forwards}
+.shop .head{display:flex;align-items:baseline;justify-content:space-between;margin:0 2px 12px}
+.shop .head h2{font-family:var(--px);font-size:10px;color:var(--gold);letter-spacing:2px;text-shadow:0 0 8px var(--gold)}
+.shop .head span{font-size:13px;color:var(--dim)}
+.slots{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.slot{position:relative;border-radius:14px;padding:14px 10px 12px;text-align:center;background:var(--card);border:1px solid rgba(255,210,59,.35);
+  cursor:pointer;overflow:hidden;transition:transform .15s;font:inherit;color:inherit;display:block;width:100%}
+.slot:hover,.slot:focus-visible{transform:translateY(-3px);box-shadow:0 0 26px -6px var(--gold);outline:none}
+.slot .price{font-family:var(--px);font-size:7px;color:var(--dim);margin-top:6px;letter-spacing:1px}
+.slot .nm{font-weight:700;font-size:17px;margin-top:8px;line-height:1.1}
+.slot .sub{font-size:13px;color:var(--dim);margin-top:2px}
+.slot svg{display:block;margin:0 auto;image-rendering:pixelated;shape-rendering:crispEdges}
+.slot.locked{cursor:default;border-color:rgba(255,255,255,.12)}
+.slot.locked .chest{filter:grayscale(.85) brightness(.7)}
+.chest{width:96px;height:80px;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.chest .lid{transform-origin:12px 30px;transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.slot.open .chest .lid{transform:translateY(-10px) rotate(-18deg)}
+.chest .glow{opacity:0;transition:opacity .3s}
+.slot.open .chest .glow{opacity:1}
+.spark{position:absolute;width:6px;height:6px;background:var(--gold);box-shadow:0 0 8px var(--gold);pointer-events:none;
+  animation:spark .9s ease-out forwards}
+@keyframes spark{to{transform:translate(var(--dx),var(--dy));opacity:0}}
+.coinslot{width:96px;height:80px}
+.coin{position:absolute;left:50%;top:6px;width:22px;height:22px;margin-left:-11px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff6b0,#ffd23b 45%,#c08a00);
+  box-shadow:0 0 12px var(--gold);opacity:0;pointer-events:none}
+.slot.drop .coin{animation:drop .55s cubic-bezier(.5,0,.8,.4) forwards}
+@keyframes drop{0%{opacity:1;transform:translateY(-30px) scaleX(1)}70%{opacity:1;transform:translateY(34px) scaleX(.35)}100%{opacity:0;transform:translateY(40px) scaleX(.2)}}
+.cash{font-family:var(--px);font-size:11px;color:#00d64f;text-shadow:0 0 8px #00d64f;margin-top:8px}
+.qrbtn{margin-top:10px;width:100%}
+.qr{display:none;margin-top:12px;border-radius:14px;padding:14px;background:#fff;text-align:center;border:3px solid var(--gold);box-shadow:0 0 30px -6px var(--gold)}
+.qr.show{display:block}
+.qr img{width:180px;height:180px;image-rendering:pixelated}
+.qr p{color:#0a0612;font-family:var(--px);font-size:8px;margin-top:8px}
+
+/* ---------- console status bar (frames the Netlify badge) ---------- */
+:root{--bar:64px}
+.statusbar{position:fixed;left:0;right:0;bottom:0;z-index:25;height:calc(var(--bar) + env(safe-area-inset-bottom));
+  padding:0 12px env(safe-area-inset-bottom);display:flex;align-items:center;gap:10px;
+  background:linear-gradient(to top,rgba(8,4,14,.97),rgba(14,7,24,.92));border-top:1px solid rgba(0,229,255,.45);
+  box-shadow:0 -6px 24px -10px rgba(0,229,255,.6);font-family:var(--px);font-size:7px;letter-spacing:1px;color:var(--dim)}
+.statusbar::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--pink),var(--cyan),transparent);animation:scanline 4s linear infinite;background-size:200% 100%}
+@keyframes scanline{to{background-position:-200% 0}}
+.statusbar .led{width:8px;height:8px;border-radius:2px;background:#39ff14;box-shadow:0 0 8px #39ff14;animation:led 1.6s steps(2) infinite}
+@keyframes led{50%{opacity:.35}}
+.statusbar .cell{display:flex;flex-direction:column;gap:5px;line-height:1}
+.statusbar .cell b{color:var(--white);font-weight:400;font-size:8px}
+.statusbar .cell b.ok{color:#39ff14}
+.statusbar .grow{flex:1}
+.cart{position:relative;flex:none;width:213px;height:var(--bar);display:none}
+.has-badge .cart{display:block}
+.cart::before{content:"CARTRIDGE";position:absolute;left:8px;top:3px;font-size:5px;color:var(--cyan);opacity:.7}
+.cart::after{content:"";position:absolute;inset:6px 0 2px 0;border:1px dashed rgba(0,229,255,.35);border-radius:10px 10px 4px 4px;
+  background:repeating-linear-gradient(90deg,rgba(0,229,255,.06) 0 3px,transparent 3px 7px)}
+#nl-badge-frame{border-radius:12px!important;box-shadow:0 0 0 1px rgba(0,229,255,.55),0 0 18px -2px rgba(0,229,255,.55),0 0 34px -8px rgba(255,43,214,.6)!important;
+  animation:cartGlow 3.2s ease-in-out infinite}
+@keyframes cartGlow{50%{box-shadow:0 0 0 1px rgba(255,43,214,.6),0 0 22px -2px rgba(255,43,214,.55),0 0 34px -8px rgba(0,229,255,.6)}}
+main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
+#toasts{bottom:calc(var(--bar) + 14px + env(safe-area-inset-bottom))!important}
+@media (max-width:420px){.statusbar .hide-s{display:none}.cart{width:205px}}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -197,7 +264,7 @@ footer .coin{color:var(--gold);animation:blink 1.4s steps(1) infinite}
 <header class="hud">
   <div class="p1">P1 <b>MADDERA</b></div>
   <div class="right">
-    <button class="chip" id="trophyBtn" aria-label="Achievements">🏆 <span id="trophyCount">0/7</span></button>
+    <button class="chip" id="trophyBtn" aria-label="Achievements">🏆 <span id="trophyCount">0/11</span></button>
     <button class="chip" id="sfxBtn" aria-pressed="false" aria-label="Sound effects">SFX <span id="sfxState">OFF</span></button>
   </div>
 </header>
@@ -254,21 +321,31 @@ footer .coin{color:var(--gold);animation:blink 1.4s steps(1) infinite}
       <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg></span>
       <span class="txt"><span class="t">Instagram</span><span class="s">@gianni.madera · reels &amp; drops</span></span>
       <span class="key">A</span></a></li>
+    <li class="item"><a class="btn tt" data-ach="tt" href="https://www.tiktok.com/@maddera.music" target="_blank" rel="noopener">
+      <span class="cursor">▶</span>
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.6 2.6 2.4 4.3 5 4.6"/></svg></span>
+      <span class="txt"><span class="t">TikTok</span><span class="s">@maddera.music · music + games</span></span>
+      <span class="key">B</span></a></li>
     <li class="item"><a class="btn yt" data-ach="yt" href="https://www.youtube.com/channel/UCW32-NGBybkX5sDPISFVpow" target="_blank" rel="noopener">
       <span class="cursor">▶</span>
       <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10 9.2v5.6l4.8-2.8z" fill="currentColor" stroke="none"/></svg></span>
       <span class="txt"><span class="t">YouTube</span><span class="s">Music videos &amp; visuals</span></span>
-      <span class="key">B</span></a></li>
+      <span class="key">X</span></a></li>
+    <li class="item"><a class="btn tw" data-ach="tw" href="https://www.twitch.tv/4ngedelamort" target="_blank" rel="noopener">
+      <span class="cursor">▶</span>
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 3h16v11l-5 5h-4l-3 3v-3H4z"/><path d="M11 7.5v4M16 7.5v4"/></svg></span>
+      <span class="txt"><span class="t">Twitch</span><span class="s">4ngeDeLaMort · live streams</span></span>
+      <span class="key">Y</span></a></li>
     <li class="item"><a class="btn sc" data-ach="sc" href="https://soundcloud.com/madd-era" target="_blank" rel="noopener">
       <span class="cursor">▶</span>
       <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 17h9.5a3.5 3.5 0 0 0 0-7 5.5 5.5 0 0 0-9.5-2.6"/><path d="M3 17v-4M6 17V9.5"/></svg></span>
       <span class="txt"><span class="t">SoundCloud</span><span class="s">MaddEra · stream the music</span></span>
-      <span class="key">X</span></a></li>
+      <span class="key sh">L</span></a></li>
     <li class="item"><a class="btn fb" data-ach="fb" href="https://www.facebook.com/gianni.madera.5/" target="_blank" rel="noopener">
       <span class="cursor">▶</span>
       <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M13.2 21.4V12.6h2.6M13.2 12.6V10a2 2 0 0 1 2-2h1.3M10.6 12.6h2.6"/></svg></span>
       <span class="txt"><span class="t">Facebook</span><span class="s">Gianni Madera</span></span>
-      <span class="key">Y</span></a></li>
+      <span class="key sh">R</span></a></li>
   </ul>
 
   <section class="np" aria-label="Now playing">
@@ -278,8 +355,48 @@ footer .coin{color:var(--gold);animation:blink 1.4s steps(1) infinite}
       src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/madd-era/dont-panic&color=%23ff2bd6&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false"></iframe>
   </section>
 
-  <footer><span class="coin">INSERT COIN</span><br>© MADDERA · ENTER THE ERA</footer>
+  <section class="shop" aria-label="Support MaddEra">
+    <div class="head"><h2>🛒 ITEM SHOP</h2><span>support the Era</span></div>
+    <div class="slots">
+      <button class="slot" id="chestSlot" type="button" aria-label="Open my Amazon wishlist">
+        <svg class="chest" viewBox="0 0 24 20" aria-hidden="true">
+          <g class="glow"><rect x="5" y="2" width="14" height="6" fill="#ffd23b" opacity=".35"/><rect x="8" y="0" width="8" height="4" fill="#fff6b0" opacity=".5"/></g>
+          <rect x="2" y="10" width="20" height="9" fill="#7a3b12"/><rect x="2" y="10" width="20" height="1" fill="#a85a1f"/>
+          <rect x="2" y="18" width="20" height="1" fill="#4a210a"/><rect x="4" y="12" width="1" height="6" fill="#4a210a"/><rect x="19" y="12" width="1" height="6" fill="#4a210a"/>
+          <rect x="10" y="11" width="4" height="4" fill="#ffd23b"/><rect x="11" y="13" width="2" height="1" fill="#4a210a"/>
+          <g class="lid"><rect x="2" y="5" width="20" height="5" fill="#93461a"/><rect x="2" y="5" width="20" height="1" fill="#c26a2a"/>
+            <rect x="2" y="9" width="20" height="1" fill="#ffd23b"/><rect x="10" y="7" width="4" height="3" fill="#ffd23b"/></g>
+        </svg>
+        <div class="nm">Loot Chest</div><div class="sub" id="chestSub">My Amazon wishlist</div>
+        <div class="price" id="chestPrice">TAP TO OPEN</div>
+      </button>
+      <button class="slot" id="coinSlot" type="button" aria-label="Tip $MaddERA on Cash App">
+        <span class="coin"></span>
+        <svg class="coinslot" viewBox="0 0 24 20" aria-hidden="true">
+          <rect x="3" y="2" width="18" height="17" rx="2" fill="#1a0a2a"/><rect x="3" y="2" width="18" height="17" rx="2" fill="none" stroke="#ff2bd6" stroke-width=".6"/>
+          <rect x="7" y="6" width="10" height="7" fill="#0a0612" stroke="#ffd23b" stroke-width=".5"/>
+          <rect x="11.3" y="7.2" width="1.4" height="4.6" fill="#ffd23b"/>
+          <rect x="8" y="15" width="8" height="2" fill="#ff3355"/><rect x="9" y="15.5" width="6" height="1" fill="#ff8fa3"/>
+        </svg>
+        <div class="nm">Insert Coin</div><div class="cash">$MaddERA</div>
+        <div class="price">CASH APP TIP</div>
+      </button>
+    </div>
+    <button class="chip qrbtn" id="qrBtn" type="button" aria-expanded="false">▦ SCAN TO TIP (QR)</button>
+    <div class="qr" id="qr"><img id="qrImg" alt="Cash App QR code for $MaddERA" width="180" height="180"><p>CASH APP · $MADDERA</p></div>
+  </section>
+
+  <footer><span class="coin-txt">INSERT COIN</span><br>© MADDERA · ENTER THE ERA</footer>
 </main>
+
+<div class="statusbar" id="statusbar" aria-hidden="true">
+  <span class="led"></span>
+  <div class="cell"><span>SERVER</span><b class="ok">ONLINE</b></div>
+  <div class="cell"><span>PING</span><b id="ping">--</b></div>
+  <div class="cell hide-s"><span>PLAYER</span><b>P1</b></div>
+  <div class="grow"></div>
+  <div class="cart"></div>
+</div>
 
 <canvas id="rain" class="layer"></canvas>
 <div id="toasts" aria-live="polite"></div>
@@ -333,6 +450,10 @@ footer .coin{color:var(--gold);animation:blink 1.4s steps(1) infinite}
     ["yt", "📺", "Tuned In", "Opened YouTube"],
     ["sc", "☁️", "On Repeat", "Opened SoundCloud"],
     ["fb", "🤝", "Friend of the Era", "Opened Facebook"],
+    ["tt", "🎵", "For You Page", "Opened TikTok"],
+    ["tw", "🟣", "Raid Party", "Opened Twitch"],
+    ["loot", "🧰", "Loot Hunter", "Opened the loot chest"],
+    ["coin", "🪙", "Coin Op", "Inserted a coin"],
     ["play", "🎧", "Don't Panic", "Pressed play on the track"],
     ["secret", "💸", "Money Flip", "Found the secret level"]
   ];
@@ -385,6 +506,52 @@ footer .coin{color:var(--gold);animation:blink 1.4s steps(1) infinite}
     const now = Date.now(); taps = now - tapT < 900 ? taps + 1 : 1; tapT = now; SFX.blip();
     if (taps >= 5) { taps = 0; secret(); }
   });
+
+  /* ---------- item shop ---------- */
+  const WISHLIST = "";   // paste the public Amazon wishlist share link here
+  const CASHAPP = "https://cash.app/$MaddERA";
+  const chest = $("#chestSlot"), coinBtn = $("#coinSlot");
+  function sparks(el, n = 14) {
+    const r = el.getBoundingClientRect();
+    for (let i = 0; i < n; i++) {
+      const s = document.createElement("i"); s.className = "spark";
+      const a = Math.random() * Math.PI * 2, d = 40 + Math.random() * 60;
+      s.style.left = r.width / 2 + "px"; s.style.top = r.height * .35 + "px";
+      s.style.setProperty("--dx", Math.cos(a) * d + "px"); s.style.setProperty("--dy", Math.sin(a) * d - 30 + "px");
+      el.appendChild(s); setTimeout(() => s.remove(), 950);
+    }
+  }
+  if (!WISHLIST) {
+    chest.classList.add("locked"); chest.setAttribute("aria-disabled", "true");
+    $("#chestSub").textContent = "Amazon wishlist"; $("#chestPrice").textContent = "🔒 UNLOCKS SOON";
+  }
+  chest.addEventListener("click", () => {
+    if (!WISHLIST) { SFX.buzz(); chest.animate([{ transform: "translateX(-4px)" }, { transform: "translateX(4px)" }, { transform: "none" }], { duration: 220, iterations: 2 }); return; }
+    window.open(WISHLIST, "_blank", "noopener");
+    chest.classList.add("open"); sparks(chest); SFX.trophy(); unlock("loot");
+    setTimeout(() => chest.classList.remove("open"), 1600);
+  });
+  coinBtn.addEventListener("click", () => {
+    window.open(CASHAPP, "_blank", "noopener");
+    coinBtn.classList.remove("drop"); void coinBtn.offsetWidth; coinBtn.classList.add("drop");
+    SFX.coin(); setTimeout(() => { sparks(coinBtn, 8); unlock("coin"); }, 480);
+  });
+  $("#qrBtn").addEventListener("click", () => {
+    const q = $("#qr"), open = !q.classList.contains("show");
+    if (open && !$("#qrImg").getAttribute("src")) $("#qrImg").src = "https://cash.app/qr/$MaddERA?size=288&margin=0";
+    q.classList.toggle("show", open); $("#qrBtn").setAttribute("aria-expanded", open); SFX.blip();
+  });
+
+  /* ---------- status bar: real ping + Netlify badge slot ---------- */
+  async function ping() {
+    try {
+      const t = performance.now(); await fetch("assets/favicon.png?p=" + Date.now(), { cache: "no-store" });
+      $("#ping").textContent = Math.round(performance.now() - t) + "ms";
+    } catch { $("#ping").textContent = "--"; }
+  }
+  ping(); setInterval(ping, 8000);
+  const markBadge = () => { if (document.getElementById("nl-badge-frame")) document.body.classList.add("has-badge"); };
+  markBadge(); new MutationObserver(markBadge).observe(document.body, { childList: true });
 
   /* ---------- SoundCloud widget: unlock on play ---------- */
   const s = document.createElement("script"); s.src = "https://w.soundcloud.com/player/api.js"; s.async = true;
