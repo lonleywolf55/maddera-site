@@ -258,6 +258,22 @@ main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
 #toasts{bottom:calc(var(--bar) + 14px + env(safe-area-inset-bottom))!important}
 @media (max-width:420px){.statusbar .hide-s{display:none}.cart{width:205px}}
 
+.dc{--c1:#5865f2;--c2:#ff2bd6}
+.share{margin-top:26px;border-radius:14px;padding:14px;background:var(--card);border:1px solid rgba(0,229,255,.35);opacity:0;transform:translateY(18px)}
+.ready .share{animation:rise .6s .65s cubic-bezier(.2,.9,.2,1) forwards}
+.share h2{font-family:var(--px);font-size:10px;color:var(--cyan);letter-spacing:2px;text-shadow:0 0 8px var(--cyan)}
+.share .hint{font-size:13px;color:var(--dim);margin:6px 0 10px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tab{font-family:var(--px);font-size:7px;padding:8px 9px;border-radius:6px;border:1px solid var(--line);background:rgba(0,0,0,.35);color:var(--dim);cursor:pointer}
+.tab[aria-selected="true"]{color:#0a0612;background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 12px -2px var(--cyan)}
+.tgt{display:flex;gap:6px;margin-top:10px}
+.tgt button{flex:1;font-size:16px;font-family:var(--ui);font-weight:700}
+.tgt button[aria-pressed="true"]{border-color:var(--pink);color:var(--pink);box-shadow:0 0 14px -4px var(--pink)}
+.code{margin-top:10px;font-family:ui-monospace,Consolas,monospace;font-size:12.5px;line-height:1.45;white-space:pre-wrap;word-break:break-all;
+  background:#06030a;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px;color:#9ff;min-height:54px}
+.copy{margin-top:10px;width:100%;font-size:9px;padding:11px}
+.copy.done{color:#0a0612;background:#39ff14;border-color:#39ff14}
+.prev{margin-top:8px;font-size:14px;color:var(--dim)}.prev a{color:var(--pink);text-decoration:underline}
 @media (prefers-reduced-motion:reduce){#nl-badge-frame{animation:none!important}.badge-glow{animation:none}}
 @media (prefers-reduced-motion:reduce){
   *,*::before{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -279,7 +295,7 @@ main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
 <header class="hud">
   <div class="p1">P1 <b>MADDERA</b></div>
   <div class="right">
-    <button class="chip" id="trophyBtn" aria-label="Achievements">🏆 <span id="trophyCount">0/11</span></button>
+    <button class="chip" id="trophyBtn" aria-label="Achievements">🏆 <span id="trophyCount">0/13</span></button>
     <button class="chip" id="sfxBtn" aria-pressed="false" aria-label="Sound effects">SFX <span id="sfxState">OFF</span></button>
   </div>
 </header>
@@ -351,6 +367,11 @@ main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
       <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 3h16v11l-5 5h-4l-3 3v-3H4z"/><path d="M11 7.5v4M16 7.5v4"/></svg></span>
       <span class="txt"><span class="t">Twitch</span><span class="s">4ngeDeLaMort · live streams</span></span>
       <span class="key">Y</span></a></li>
+    <li class="item"><a class="btn dc" data-ach="dc" href="https://discord.gg/6hdA3UTnNy" target="_blank" rel="noopener">
+      <span class="cursor">▶</span>
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 6.5c4-1.6 8-1.6 12 0l2 9c-2 1.8-4 2.6-5.5 2.8l-1-1.8M6 6.5l-2 9c2 1.8 4 2.6 5.5 2.8l1-1.8"/><circle cx="9.3" cy="12.2" r="1.2" fill="currentColor" stroke="none"/><circle cx="14.7" cy="12.2" r="1.2" fill="currentColor" stroke="none"/></svg></span>
+      <span class="txt"><span class="t">Discord</span><span class="s">Swift Syndicate · join the squad</span></span>
+      <span class="key sh">ZL</span></a></li>
     <li class="item"><a class="btn sc" data-ach="sc" href="https://soundcloud.com/madd-era" target="_blank" rel="noopener">
       <span class="cursor">▶</span>
       <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 17h9.5a3.5 3.5 0 0 0 0-7 5.5 5.5 0 0 0-9.5-2.6"/><path d="M3 17v-4M6 17V9.5"/></svg></span>
@@ -399,6 +420,16 @@ main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
     </div>
     <button class="chip qrbtn" id="qrBtn" type="button" aria-expanded="false">▦ SCAN TO TIP (QR)</button>
     <div class="qr" id="qr"><img id="qrImg" alt="Cash App QR code for $MaddERA" width="180" height="180"><p>CASH APP · $MADDERA</p></div>
+  </section>
+
+  <section class="share" aria-label="Share links">
+    <h2>🔗 SHARE THE ERA</h2>
+    <p class="hint">Custom-text links for bios, posts and forums. Pick a format, tap copy.</p>
+    <div class="tabs" role="tablist" id="fmtTabs"></div>
+    <div class="tgt"><button class="chip" data-t="site" aria-pressed="true">THIS PAGE</button><button class="chip" data-t="discord" aria-pressed="false">DISCORD</button><button class="chip" data-t="song" aria-pressed="false">DON'T PANIC</button></div>
+    <pre class="code" id="snip"></pre>
+    <div class="prev" id="snipPrev"></div>
+    <button class="chip copy" id="copyBtn">⧉ COPY</button>
   </section>
 
   <footer><span class="coin-txt">INSERT COIN</span><br>© MADDERA · ENTER THE ERA</footer>
@@ -468,6 +499,8 @@ main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
     ["fb", "🤝", "Friend of the Era", "Opened Facebook"],
     ["tt", "🎵", "For You Page", "Opened TikTok"],
     ["tw", "🟣", "Raid Party", "Opened Twitch"],
+    ["dc", "💬", "Syndicate", "Joined the Discord"],
+    ["share", "📣", "Hype Man", "Copied a share link"],
     ["loot", "🧰", "Loot Hunter", "Opened the loot chest"],
     ["coin", "🪙", "Coin Op", "Inserted a coin"],
     ["play", "🎧", "Don't Panic", "Pressed play on the track"],
@@ -568,6 +601,42 @@ main{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
   ping(); setInterval(ping, 8000);
   const markBadge = () => { if (document.getElementById("nl-badge-frame")) document.body.classList.add("has-badge"); };
   markBadge(); new MutationObserver(markBadge).observe(document.body, { childList: true });
+
+  /* ---------- share snippets ---------- */
+  const TGT = {
+    site: { url: "https://maddera.netlify.app", text: "✦ Enter the MaddEra ✦" },
+    discord: { url: "https://discord.gg/6hdA3UTnNy", text: "Join the Swift Syndicate on Discord" },
+    song: { url: "https://soundcloud.com/madd-era/dont-panic", text: "Don't Panic — MaddEra" }
+  };
+  const FMT = {
+    "MARKDOWN": (u, x) => `[${x}](${u})`,
+    "HTML": (u, x) => `<a href="${u}" target="_blank" rel="noopener">${x}</a>`,
+    "BBCODE": (u, x) => `[url=${u}]${x}[/url]`,
+    "DISCORD": (u, x) => `[${x}](<${u}>)`,
+    "WIKI": (u, x) => `[${u} ${x}]`,
+    "PLAIN": (u, x) => `${x}\n${u}`
+  };
+  const NOTE = { "MARKDOWN": "Reddit, GitHub, Notion", "HTML": "websites, blogs, email signatures", "BBCODE": "forums, Steam",
+    "DISCORD": "Discord messages (no ugly preview card)", "WIKI": "MediaWiki / Fandom", "PLAIN": "Instagram, TikTok, anywhere" };
+  let fmt = "MARKDOWN", tgt = "site";
+  const tabs = $("#fmtTabs");
+  tabs.innerHTML = Object.keys(FMT).map(k => `<button class="tab" role="tab" aria-selected="${k === fmt}" data-f="${k}">${k}</button>`).join("");
+  const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  function renderSnip() {
+    const { url, text } = TGT[tgt]; $("#snip").textContent = FMT[fmt](url, text);
+    $("#snipPrev").innerHTML = `Shows as: <a href="${url}" target="_blank" rel="noopener">${esc(text)}</a> · ${NOTE[fmt]}`;
+  }
+  tabs.addEventListener("click", e => { const b = e.target.closest(".tab"); if (!b) return; fmt = b.dataset.f;
+    tabs.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", x === b)); SFX.blip(); renderSnip(); });
+  document.querySelectorAll(".tgt button").forEach(b => b.addEventListener("click", () => { tgt = b.dataset.t;
+    document.querySelectorAll(".tgt button").forEach(x => x.setAttribute("aria-pressed", x === b)); SFX.blip(); renderSnip(); }));
+  $("#copyBtn").addEventListener("click", async () => {
+    const s = $("#snip").textContent, b = $("#copyBtn");
+    try { await navigator.clipboard.writeText(s); } catch { const r = document.createRange(); r.selectNodeContents($("#snip")); const g = getSelection(); g.removeAllRanges(); g.addRange(r); document.execCommand("copy"); }
+    b.classList.add("done"); b.textContent = "✓ COPIED"; SFX.select(); unlock("share");
+    setTimeout(() => { b.classList.remove("done"); b.textContent = "⧉ COPY"; }, 1400);
+  });
+  renderSnip();
 
   /* ---------- SoundCloud widget: unlock on play ---------- */
   const s = document.createElement("script"); s.src = "https://w.soundcloud.com/player/api.js"; s.async = true;
