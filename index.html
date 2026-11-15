@@ -327,6 +327,37 @@ body.is-live .btn.tw .livepill{display:inline-block}
 #gcv{width:min(100%,420px);aspect-ratio:2/3;max-height:calc(100svh - 150px);image-rendering:pixelated;border:2px solid var(--pink);border-radius:10px;box-shadow:0 0 30px -6px var(--pink);background:#0a0612;touch-action:none}
 #game .gbtns{display:flex;gap:8px;margin-top:10px;width:min(100%,420px)}
 #game .gbtns button{flex:1}
+
+/* ---------- track switcher + watch ---------- */
+.np:not(.playing) .eq i{animation-play-state:paused;height:3px}
+.np h2 .trk{margin-left:auto;font-size:8px;color:var(--dim)}
+.deck{display:flex;gap:8px;margin-top:10px}
+.dbtn{flex:1;min-height:46px;font-size:18px;font-family:var(--ui);font-weight:700;color:var(--white);display:grid;place-items:center}
+.dbtn.big{flex:2;color:#0a0612;background:var(--pink);border-color:var(--pink);box-shadow:0 0 18px -4px var(--pink)}
+.tracks{display:grid;gap:6px;margin-top:10px}
+.trow{display:flex;align-items:center;gap:10px;min-height:46px;padding:8px 12px;border-radius:10px;text-align:left;cursor:pointer;
+  font:inherit;color:var(--white);background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);width:100%}
+.trow .n{font-family:var(--px);font-size:8px;color:var(--dim);width:18px}
+.trow .tt{flex:1;font-weight:700;font-size:17px;line-height:1.1}
+.trow .st{font-family:var(--px);font-size:7px;color:var(--cyan);opacity:0}
+.trow[aria-current="true"]{border-color:var(--pink);background:rgba(255,43,214,.12);box-shadow:0 0 18px -6px var(--pink)}
+.trow[aria-current="true"] .st{opacity:1}
+.trow:focus-visible,.dbtn:focus-visible,.vfacade:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.watch{margin-top:26px;opacity:0;transform:translateY(18px)}
+.ready .watch{animation:rise .6s .5s cubic-bezier(.2,.9,.2,1) forwards}
+.watch h2{font-family:var(--px);font-size:10px;color:var(--pink);letter-spacing:2px;text-shadow:0 0 8px var(--pink);margin:0 2px 12px}
+.vbox{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#000;aspect-ratio:16/9;box-shadow:0 0 30px -10px var(--pink)}
+.vfacade{position:absolute;inset:0;width:100%;height:100%;border:0;padding:0;cursor:pointer;background:#000;color:#fff;font:inherit;display:block}
+.vfacade img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85}
+.vfacade::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(10,6,18,.9),rgba(10,6,18,0) 55%)}
+.vplay{position:absolute;left:50%;top:44%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;z-index:1;display:grid;place-items:center;
+  font-size:26px;color:#0a0612;background:var(--pink);box-shadow:0 0 28px var(--pink);padding-left:5px;transition:transform .15s}
+.vfacade:hover .vplay{transform:scale(1.08)}
+.vcap{position:absolute;left:12px;right:12px;bottom:10px;z-index:1;text-align:left}
+.vcap b{display:block;font-size:18px;line-height:1.1}
+.vcap span{font-size:12px;color:var(--dim)}
+.vbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vchips{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
 @media (prefers-reduced-motion:reduce){#nl-badge-frame{animation:none!important}.badge-glow{animation:none}}
 @media (prefers-reduced-motion:reduce){
   *,*::before{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -349,7 +380,7 @@ body.is-live .btn.tw .livepill{display:inline-block}
   <div class="p1">P1 <b>MADDERA</b></div>
   <div class="right">
     <span class="chip" id="streak" title="Daily visit streak">🔥 1</span>
-    <button class="chip" id="trophyBtn" aria-label="Achievements">🏆 <span id="trophyCount">0/18</span></button>
+    <button class="chip" id="trophyBtn" aria-label="Achievements">🏆 <span id="trophyCount">0/20</span></button>
     <button class="chip" id="sfxBtn" aria-pressed="false" aria-label="Sound effects">SFX <span id="sfxState">OFF</span></button>
   </div>
 </header>
@@ -454,11 +485,29 @@ body.is-live .btn.tw .livepill{display:inline-block}
     <div class="cta">Swift Syndicate is live right now. <a href="https://discord.gg/6hdA3UTnNy" target="_blank" rel="noopener" data-ach="dc" id="lobbyJoin">Jump in</a></div>
   </div>
 
-  <section class="np" aria-label="Now playing">
-    <h2><span class="eq"><i></i><i></i><i></i><i></i></span> NOW PLAYING</h2>
-    <div class="song">Don't Panic</div>
-    <iframe id="scPlayer" title="Don't Panic by MaddEra on SoundCloud" allow="autoplay" loading="lazy"
-      src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/gianni-madera-274580725/dont-panic&color=%23ff2bd6&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false"></iframe>
+  <section class="np" id="np" aria-label="Now playing">
+    <h2><span class="eq"><i></i><i></i><i></i><i></i></span> NOW PLAYING <span class="trk" id="trkCount"></span></h2>
+    <div class="song" id="songName">Don't Panic</div>
+    <iframe id="scPlayer" title="MaddEra on SoundCloud" allow="autoplay" loading="lazy"
+      src="https://w.soundcloud.com/player/?url=https://soundcloud.com/gianni-madera-274580725/dont-panic&color=%23ff2bd6&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false"></iframe>
+    <div class="deck" id="deck">
+      <button class="chip dbtn" id="prevBtn" type="button" aria-label="Previous track">⏮</button>
+      <button class="chip dbtn big" id="ppBtn" type="button" aria-label="Play or pause">▶ PLAY</button>
+      <button class="chip dbtn" id="nextBtn" type="button" aria-label="Next track">⏭</button>
+    </div>
+    <div class="tracks" id="trackList" role="list" aria-label="Tracks"></div>
+  </section>
+
+  <section class="watch" id="watch" aria-label="Watch">
+    <h2>📺 WATCH</h2>
+    <div class="vbox" id="vbox">
+      <button class="vfacade" id="vFacade" type="button" aria-label="Play video: Don't Panic">
+        <img id="vThumb" src="assets/yt-dont-panic.jpg" alt="" width="640" height="360" loading="lazy">
+        <span class="vplay" aria-hidden="true">▶</span>
+        <span class="vcap"><b id="vTitle">"Don't Panic" — MaddEra</b><span>Tap to load the video from YouTube (privacy mode)</span></span>
+      </button>
+    </div>
+    <div class="vchips" id="vChips"></div>
   </section>
 
   <section class="shop" aria-label="Support MaddEra">
@@ -590,6 +639,8 @@ body.is-live .btn.tw .livepill{display:inline-block}
     ["quest", "📜", "Quest Giver", "Finished a daily quest"],
     ["arcade", "🕹️", "Arcade Rat", "Played Money Flip"],
     ["score500", "💰", "High Roller", "Scored 500+ in Money Flip"],
+    ["dj", "🎚️", "DJ Mode", "Switched tracks in the player"],
+    ["cinema", "🎬", "Movie Night", "Played the video"],
     ["streak3", "🔥", "On Fire", "3-day visit streak"],
     ["loot", "🧰", "Loot Hunter", "Opened the loot chest"],
     ["coin", "🪙", "Coin Op", "Inserted a coin"],
@@ -689,7 +740,7 @@ body.is-live .btn.tw .livepill{display:inline-block}
       $("#ping").textContent = Math.round(performance.now() - t) + "ms";
     } catch { $("#ping").textContent = "--"; }
   }
-  ping(); setInterval(ping, 8000);
+  ping(); setInterval(() => { if (!document.hidden) ping(); }, 30000);
   const markBadge = () => { if (document.getElementById("nl-badge-frame")) document.body.classList.add("has-badge"); };
   markBadge(); new MutationObserver(markBadge).observe(document.body, { childList: true });
 
@@ -746,7 +797,9 @@ body.is-live .btn.tw .livepill{display:inline-block}
     { t: "Open the Loot Chest", ev: ["loot"], n: 1 },
     { t: "Score 500+ in Money Flip", ev: ["score500"], n: 1 },
     { t: "Join the Discord lobby", ev: ["dc"], n: 1 },
-    { t: "Play Money Flip 2 times", ev: ["arcade"], n: 2 }
+    { t: "Play Money Flip 2 times", ev: ["arcade"], n: 2 },
+    { t: "Switch tracks in the player", ev: ["dj"], n: 1 },
+    { t: "Watch the video", ev: ["cinema"], n: 1 }
   ];
   const dayNo = Math.floor(new Date(today.replace(/-(\d)\b/g, "-0$1")).getTime() / 864e5);
   const Q = QUESTS[((dayNo % QUESTS.length) + QUESTS.length) % QUESTS.length];
@@ -769,13 +822,14 @@ body.is-live .btn.tw .livepill{display:inline-block}
 
   /* ---------- Discord live lobby (official server widget) ---------- */
   const STATUS = { online: "#39ff14", idle: "#ffd23b", dnd: "#ff3355" };
+  const safeAv = u => /^https:\/\/cdn\.discordapp\.com\/[\w\-./?=&%]+$/.test(String(u)) ? u : "";
   async function lobby() {
     try {
       const r = await fetch("https://discord.com/api/guilds/1261324691688132729/widget.json", { cache: "no-store" });
       if (!r.ok) throw 0; const d = await r.json(); const n = d.presence_count || 0;
       $("#onlineN").textContent = n + " ON"; $("#lobbyN").textContent = n;
       const show = (d.members || []).slice(0, 12);
-      $("#lobbyFaces").innerHTML = show.map(m => `<span style="--st:${STATUS[m.status] || "#39ff14"}" title="${String(m.username).replace(/[<>&"]/g, "")}"><img src="${m.avatar_url}" alt="" width="30" height="30" loading="lazy" referrerpolicy="no-referrer"></span>`).join("")
+      $("#lobbyFaces").innerHTML = show.map(m => `<span style="--st:${STATUS[m.status] || "#39ff14"}" title="${String(m.username).replace(/[<>&"]/g, "")}"><img src="${safeAv(m.avatar_url)}" alt="" width="30" height="30" loading="lazy" referrerpolicy="no-referrer"></span>`).join("")
         + (n > show.length ? `<span class="more">+${n - show.length}</span>` : "");
       $("#lobby").classList.toggle("on", n > 0);
     } catch { $("#onlineN").textContent = "--"; $("#lobby").classList.remove("on"); }
@@ -880,10 +934,65 @@ body.is-live .btn.tw .livepill{display:inline-block}
     unlock("share");
   });
 
-  /* ---------- SoundCloud widget: unlock on play ---------- */
+  /* ---------- music: SoundCloud player with a custom track switcher ---------- */
+  const SCU = "https://soundcloud.com/gianni-madera-274580725/";
+  const ALL_TRACKS = [
+    { t: "Don't Panic", s: "dont-panic", on: true },
+    { t: "Love Fast", s: "love-fast", on: true },
+    { t: "I'm So Done (not really)", s: "im-so-done-not-really", on: false },   // set on:true to show
+    { t: "Never L💔ve", s: "never-l-ve", on: false },
+    { t: "Stuck (prod. Never Know) snippet", s: "stuck-prod-never-know-snippet", on: false }
+  ];
+  const TRACKS = ALL_TRACKS.filter(x => x.on);
+  const npEl = $("#np"); let sc = null, cur = 0, scReady = false, isPlaying = false, switched = false;
+  function renderTracks() {
+    $("#trackList").innerHTML = TRACKS.map((x, i) => `<button class="trow" type="button" role="listitem" data-i="${i}" aria-current="${i === cur}"><span class="n">${i + 1}</span><span class="tt"></span><span class="st">${i === cur && isPlaying ? "▶ PLAYING" : i === cur ? "LOADED" : ""}</span></button>`).join("");
+    $("#trackList").querySelectorAll(".tt").forEach((e, i) => e.textContent = TRACKS[i].t);
+    $("#trkCount").textContent = TRACKS.length > 1 ? (cur + 1) + "/" + TRACKS.length : "";
+    $("#songName").textContent = TRACKS[cur].t;
+    $("#deck").style.display = $("#trackList").style.display = TRACKS.length > 1 ? "" : "none";
+    $("#ppBtn").textContent = isPlaying ? "⏸ PAUSE" : "▶ PLAY";
+    $("#scPlayer").title = TRACKS[cur].t + " by MaddEra on SoundCloud";
+  }
+  function setPlaying(v) { isPlaying = v; npEl.classList.toggle("playing", v); renderTracks(); }
+  function go(i, play) {
+    cur = (i + TRACKS.length) % TRACKS.length; setPlaying(false);
+    const url = SCU + TRACKS[cur].s;
+    if (sc && scReady) sc.load(url, { auto_play: !!play, color: "#ff2bd6", hide_related: true, show_comments: false, show_user: true, show_reposts: false, show_teaser: false, visual: false, callback: () => { try { sc.setVolume(100); } catch {} } });
+    else $("#scPlayer").src = "https://w.soundcloud.com/player/?url=" + encodeURIComponent(url) + "&color=%23ff2bd6&auto_play=" + (play ? "true" : "false") + "&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false";
+  }
+  function userSwitch(i) { go(i, true); SFX.select(); if (!switched) { switched = true; unlock("dj"); } else questEvent("dj"); }
+  $("#trackList").addEventListener("click", e => { const b = e.target.closest(".trow"); if (b) userSwitch(+b.dataset.i); });
+  $("#prevBtn").addEventListener("click", () => userSwitch(cur - 1));
+  $("#nextBtn").addEventListener("click", () => userSwitch(cur + 1));
+  $("#ppBtn").addEventListener("click", () => { SFX.blip(); if (sc && scReady) { try { sc.toggle(); } catch {} } else go(cur, true); });
+  renderTracks();
   const s = document.createElement("script"); s.src = "https://w.soundcloud.com/player/api.js"; s.async = true;
-  s.onload = () => { try { const w = SC.Widget($("#scPlayer")); w.bind(SC.Widget.Events.PLAY, () => unlock("play")); } catch {} };
+  s.onload = () => { try {
+    sc = SC.Widget($("#scPlayer"));
+    sc.bind(SC.Widget.Events.READY, () => { scReady = true; try { sc.setVolume(100); } catch {} });
+    sc.bind(SC.Widget.Events.PLAY, () => { setPlaying(true); unlock("play"); closeVideo(); });
+    sc.bind(SC.Widget.Events.PAUSE, () => setPlaying(false));
+    sc.bind(SC.Widget.Events.FINISH, () => { setPlaying(false); if (TRACKS.length > 1) go(cur + 1, true); });
+  } catch {} };
   document.head.appendChild(s);
+
+  /* ---------- video: YouTube click-to-load (privacy mode, nothing loads until tapped) ---------- */
+  const VIDEOS = [{ id: "0BB_yo8Pt_U", title: "\"Don't Panic\" — MaddEra" }];
+  let vcur = 0;
+  const vFacadeHTML = () => $("#vbox").dataset.facade;
+  $("#vbox").dataset.facade = $("#vbox").innerHTML;
+  function bindFacade() { const f = $("#vFacade"); if (f) f.addEventListener("click", playVideo); }
+  function playVideo() {
+    const v = VIDEOS[vcur]; try { if (sc && scReady) sc.pause(); } catch {}
+    const f = document.createElement("iframe");
+    f.title = v.title; f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen"; f.allowFullscreen = true; f.referrerPolicy = "strict-origin-when-cross-origin";
+    f.src = "https://www.youtube-nocookie.com/embed/" + v.id + "?autoplay=1&rel=0&playsinline=1&modestbranding=1";
+    $("#vbox").innerHTML = ""; $("#vbox").appendChild(f); SFX.select(); unlock("cinema");
+  }
+  function closeVideo() { if ($("#vbox iframe")) { $("#vbox").innerHTML = vFacadeHTML(); bindFacade(); } }
+  bindFacade();
+  if (VIDEOS.length > 1) $("#vChips").innerHTML = VIDEOS.map((v, i) => `<button class="chip" data-v="${i}">${i + 1}</button>`).join("");
 
   /* ---------- 3D tilt (pointer + idle sway) ---------- */
   const hero = $("#hero"); let tx = 0, ty = 0, cx = 0, cy = 0, lastMove = 0;
