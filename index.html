@@ -165,14 +165,18 @@ main{position:relative;z-index:10;max-width:480px;margin:0 auto;padding:calc(64p
 @keyframes tout{to{transform:translateY(20px);opacity:0}}
 
 /* ---------- trophies panel ---------- */
-#trophies{position:fixed;inset:0;z-index:55;background:rgba(5,3,9,.86);display:none;align-items:center;justify-content:center;padding:16px}
+#trophies{position:fixed;inset:0;z-index:55;background:rgba(5,3,9,.86);display:none;align-items:center;justify-content:center;padding:12px 12px calc(84px + env(safe-area-inset-bottom))}
 #trophies.open{display:flex}
-#trophies .box{width:min(100%,420px);border:1px solid var(--gold);border-radius:14px;background:var(--bg2);padding:18px;box-shadow:0 0 40px -10px var(--gold)}
-#trophies h3{font-family:var(--px);font-size:10px;color:var(--gold);margin-bottom:14px}
+#trophies .box{width:min(100%,420px);display:flex;flex-direction:column;max-height:calc(100vh - 100px);max-height:calc(100dvh - 100px);overflow:hidden;border:1px solid var(--gold);border-radius:14px;background:var(--bg2);padding:0;box-shadow:0 0 40px -10px var(--gold)}
+#trophies .bhead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 10px 10px 16px;border-bottom:1px solid rgba(255,255,255,.08);flex:none}
+#trophies .xbtn{width:46px;height:46px;font-size:20px;display:grid;place-items:center;flex:none}
+#trophies ul{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;flex:1 1 auto;min-height:0;padding:0 16px;margin:0}
+body.modal-open{overflow:hidden}
+#trophies h3{font-family:var(--px);font-size:10px;color:var(--gold);margin:0}
 #trophies li{list-style:none;display:flex;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06)}
 #trophies li.locked{opacity:.38}
 #trophies li .n{font-weight:700;font-size:17px}#trophies li .d{font-size:13px;color:var(--dim)}
-#trophies .close{margin-top:14px;width:100%}
+#trophies .close{margin:12px 16px 14px;width:calc(100% - 32px);min-height:46px;flex:none}
 
 footer{text-align:center;margin-top:30px;font-family:var(--px);font-size:8px;color:var(--dim);line-height:2}
 footer .coin-txt{color:var(--gold);animation:blink 1.4s steps(1) infinite}
@@ -488,8 +492,7 @@ body.is-live .btn.tw .livepill{display:inline-block}
   <section class="np" id="np" aria-label="Now playing">
     <h2><span class="eq"><i></i><i></i><i></i><i></i></span> NOW PLAYING <span class="trk" id="trkCount"></span></h2>
     <div class="song" id="songName">Don't Panic</div>
-    <iframe id="scPlayer" title="MaddEra on SoundCloud" allow="autoplay" loading="lazy"
-      src="https://w.soundcloud.com/player/?url=https://soundcloud.com/gianni-madera-274580725/dont-panic&color=%23ff2bd6&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false"></iframe>
+    <iframe id="scPlayer" title="MaddEra on SoundCloud" allow="autoplay" loading="lazy"></iframe>
     <div class="deck" id="deck">
       <button class="chip dbtn" id="prevBtn" type="button" aria-label="Previous track">⏮</button>
       <button class="chip dbtn big" id="ppBtn" type="button" aria-label="Play or pause">▶ PLAY</button>
@@ -580,7 +583,7 @@ body.is-live .btn.tw .livepill{display:inline-block}
 </div>
 <div id="toasts" aria-live="polite"></div>
 <div id="trophies" role="dialog" aria-modal="true" aria-label="Achievements">
-  <div class="box"><h3>🏆 ACHIEVEMENTS</h3><ul id="trophyList"></ul><button class="chip close" id="trophyClose">CLOSE</button></div>
+  <div class="box"><div class="bhead"><h3>🏆 ACHIEVEMENTS</h3><button class="chip xbtn" id="trophyX" type="button" aria-label="Close achievements">✕</button></div><ul id="trophyList"></ul><button class="chip close" id="trophyClose" type="button">CLOSE</button></div>
 </div>
 
 <script>
@@ -668,9 +671,12 @@ body.is-live .btn.tw .livepill{display:inline-block}
     if (touched && navigator.vibrate) try { navigator.vibrate([20, 40, 20]); } catch {}
   }
   renderProgress();
-  $("#trophyBtn").addEventListener("click", () => { $("#trophies").classList.add("open"); SFX.select(); });
-  $("#trophyClose").addEventListener("click", () => $("#trophies").classList.remove("open"));
-  $("#trophies").addEventListener("click", e => { if (e.target.id === "trophies") $("#trophies").classList.remove("open"); });
+  const openTrophies = () => { $("#trophies").classList.add("open"); document.body.classList.add("modal-open"); SFX.select(); setTimeout(() => { try { $("#trophyX").focus({ preventScroll: true }); } catch {} }, 50); };
+  const closeTrophies = () => { $("#trophies").classList.remove("open"); document.body.classList.remove("modal-open"); };
+  $("#trophyBtn").addEventListener("click", openTrophies);
+  $("#trophyX").addEventListener("click", closeTrophies);
+  $("#trophyClose").addEventListener("click", closeTrophies);
+  $("#trophies").addEventListener("click", e => { if (e.target.id === "trophies") closeTrophies(); });
 
   /* ---------- menu: hover/keyboard selection ---------- */
   const btns = [...document.querySelectorAll(".btn")]; let sel = -1;
@@ -690,7 +696,7 @@ body.is-live .btn.tw .livepill{display:inline-block}
   addEventListener("keydown", e => {
     ci = (e.key === code[ci] || e.key.toLowerCase() === code[ci]) ? ci + 1 : (e.key === code[0] ? 1 : 0);
     if (ci === code.length) { ci = 0; secret(); }
-    if (e.key === "Escape") $("#trophies").classList.remove("open");
+    if (e.key === "Escape") closeTrophies();
   });
   let taps = 0, tapT = 0;
   $("#haloHit").addEventListener("click", () => {
@@ -936,16 +942,17 @@ body.is-live .btn.tw .livepill{display:inline-block}
 
   /* ---------- music: SoundCloud player with a custom track switcher ---------- */
   const SCU = "https://soundcloud.com/gianni-madera-274580725/";
-  const ALL_TRACKS = [
-    { t: "Don't Panic", s: "dont-panic", on: true },
-    { t: "Love Fast", s: "love-fast", on: true },
-    { t: "I'm So Done (not really)", s: "im-so-done-not-really", on: false },   // set on:true to show
-    { t: "Never L💔ve", s: "never-l-ve", on: false },
-    { t: "Stuck (prod. Never Know) snippet", s: "stuck-prod-never-know-snippet", on: false }
-  ];
-  const TRACKS = ALL_TRACKS.filter(x => x.on);
-  const npEl = $("#np"); let sc = null, cur = 0, scReady = false, isPlaying = false, switched = false;
+  // Playlist mode: make a PUBLIC SoundCloud playlist called "My Tracks" (address .../sets/my-tracks).
+  // Whatever is in it shows up here live, no redeploy. Until it exists, the FALLBACK list is used.
+  const qp = new URLSearchParams(location.search).get("playlist");
+  const PLAYLIST = SCU + "sets/" + (/^[a-z0-9-]{1,60}$/.test(qp || "") ? qp : "my-tracks");
+  const FALLBACK = [{ t: "Don't Panic", s: "dont-panic" }, { t: "Love Fast", s: "love-fast" }];
+  let TRACKS = FALLBACK.slice(), mode = "static";
+  const npEl = $("#np"); let sc = null, cur = 0, scReady = false, isPlaying = false, switched = false, listed = false, started = false;
+  const playerSrc = (u, auto) => "https://w.soundcloud.com/player/?url=" + encodeURIComponent(u) + "&color=%23ff2bd6&auto_play=" + (auto ? "true" : "false") + "&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false";
+  const LOADOPTS = { color: "#ff2bd6", hide_related: true, show_comments: false, show_user: true, show_reposts: false, show_teaser: false, visual: false };
   function renderTracks() {
+    if (!TRACKS.length) return;
     $("#trackList").innerHTML = TRACKS.map((x, i) => `<button class="trow" type="button" role="listitem" data-i="${i}" aria-current="${i === cur}"><span class="n">${i + 1}</span><span class="tt"></span><span class="st">${i === cur && isPlaying ? "▶ PLAYING" : i === cur ? "LOADED" : ""}</span></button>`).join("");
     $("#trackList").querySelectorAll(".tt").forEach((e, i) => e.textContent = TRACKS[i].t);
     $("#trkCount").textContent = TRACKS.length > 1 ? (cur + 1) + "/" + TRACKS.length : "";
@@ -956,10 +963,12 @@ body.is-live .btn.tw .livepill{display:inline-block}
   }
   function setPlaying(v) { isPlaying = v; npEl.classList.toggle("playing", v); renderTracks(); }
   function go(i, play) {
+    if (!TRACKS.length) return;
     cur = (i + TRACKS.length) % TRACKS.length; setPlaying(false);
+    if (mode === "playlist") { if (sc && scReady) { try { sc.skip(cur); if (play) setTimeout(() => { try { sc.play(); } catch {} }, 200); } catch {} } return; }
     const url = SCU + TRACKS[cur].s;
-    if (sc && scReady) sc.load(url, { auto_play: !!play, color: "#ff2bd6", hide_related: true, show_comments: false, show_user: true, show_reposts: false, show_teaser: false, visual: false, callback: () => { try { sc.setVolume(100); } catch {} } });
-    else $("#scPlayer").src = "https://w.soundcloud.com/player/?url=" + encodeURIComponent(url) + "&color=%23ff2bd6&auto_play=" + (play ? "true" : "false") + "&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false";
+    if (sc && scReady) sc.load(url, Object.assign({ auto_play: !!play, callback: () => { try { sc.setVolume(100); } catch {} } }, LOADOPTS));
+    else $("#scPlayer").src = playerSrc(url, play);
   }
   function userSwitch(i) { go(i, true); SFX.select(); if (!switched) { switched = true; unlock("dj"); } else questEvent("dj"); }
   $("#trackList").addEventListener("click", e => { const b = e.target.closest(".trow"); if (b) userSwitch(+b.dataset.i); });
@@ -967,15 +976,32 @@ body.is-live .btn.tw .livepill{display:inline-block}
   $("#nextBtn").addEventListener("click", () => userSwitch(cur + 1));
   $("#ppBtn").addEventListener("click", () => { SFX.blip(); if (sc && scReady) { try { sc.toggle(); } catch {} } else go(cur, true); });
   renderTracks();
-  const s = document.createElement("script"); s.src = "https://w.soundcloud.com/player/api.js"; s.async = true;
-  s.onload = () => { try {
-    sc = SC.Widget($("#scPlayer"));
-    sc.bind(SC.Widget.Events.READY, () => { scReady = true; try { sc.setVolume(100); } catch {} });
-    sc.bind(SC.Widget.Events.PLAY, () => { setPlaying(true); unlock("play"); closeVideo(); });
-    sc.bind(SC.Widget.Events.PAUSE, () => setPlaying(false));
-    sc.bind(SC.Widget.Events.FINISH, () => { setPlaying(false); if (TRACKS.length > 1) go(cur + 1, true); });
-  } catch {} };
-  document.head.appendChild(s);
+  function fallBack() {
+    mode = "static"; TRACKS = FALLBACK.slice(); cur = 0; renderTracks();
+    if (sc) { try { sc.load(SCU + FALLBACK[0].s, Object.assign({ auto_play: false }, LOADOPTS)); } catch {} }
+  }
+  function loadList() {
+    listed = true;
+    try { sc.getSounds(list => { if (!list || !list.length) { fallBack(); return; } TRACKS = list.map(x => ({ t: String(x.title || "Track") })); cur = 0; renderTracks(); }); } catch { fallBack(); }
+  }
+  function syncIndex() { try { sc.getCurrentSoundIndex(i => { if (typeof i === "number" && TRACKS[i] && i !== cur) { cur = i; renderTracks(); } }); } catch {} }
+  function startPlayer(usePlaylist) {
+    if (started) return; started = true; mode = usePlaylist ? "playlist" : "static";
+    $("#scPlayer").src = playerSrc(usePlaylist ? PLAYLIST : SCU + FALLBACK[0].s, false);
+    const s = document.createElement("script"); s.src = "https://w.soundcloud.com/player/api.js"; s.async = true;
+    s.onload = () => { try {
+      sc = SC.Widget($("#scPlayer"));
+      sc.bind(SC.Widget.Events.READY, () => { scReady = true; try { sc.setVolume(100); } catch {} if (mode === "playlist" && !listed) loadList(); });
+      sc.bind(SC.Widget.Events.PLAY, () => { setPlaying(true); unlock("play"); closeVideo(); if (mode === "playlist") syncIndex(); });
+      sc.bind(SC.Widget.Events.PAUSE, () => setPlaying(false));
+      sc.bind(SC.Widget.Events.FINISH, () => { setPlaying(false); if (mode === "static" && TRACKS.length > 1) go(cur + 1, true); });
+    } catch {} };
+    document.head.appendChild(s);
+  }
+  // does the playlist exist? (SoundCloud's oEmbed answers 200 or 404 and allows browser requests)
+  setTimeout(() => startPlayer(false), 4000);
+  fetch("https://soundcloud.com/oembed?format=json&url=" + encodeURIComponent(PLAYLIST), { cache: "no-store" })
+    .then(r => startPlayer(r.ok)).catch(() => startPlayer(false));
 
   /* ---------- video: YouTube click-to-load (privacy mode, nothing loads until tapped) ---------- */
   const VIDEOS = [{ id: "0BB_yo8Pt_U", title: "\"Don't Panic\" — MaddEra" }];
