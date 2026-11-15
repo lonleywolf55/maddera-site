@@ -362,6 +362,7 @@ body.is-live .btn.tw .livepill{display:inline-block}
 .vcap span{font-size:12px;color:var(--dim)}
 .vbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .vchips{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.linkchip{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;text-decoration:none;color:var(--white);font-size:9px}
 @media (prefers-reduced-motion:reduce){#nl-badge-frame{animation:none!important}.badge-glow{animation:none}}
 @media (prefers-reduced-motion:reduce){
   *,*::before{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -499,18 +500,19 @@ body.is-live .btn.tw .livepill{display:inline-block}
       <button class="chip dbtn" id="nextBtn" type="button" aria-label="Next track">⏭</button>
     </div>
     <div class="tracks" id="trackList" role="list" aria-label="Tracks"></div>
+    <div class="vchips"><a class="chip linkchip" href="https://soundcloud.com/gianni-madera-274580725/sets/playlist-for-maddera-com" target="_blank" rel="noopener" data-ach="sc">☁ OPEN PLAYLIST ON SOUNDCLOUD</a></div>
   </section>
 
   <section class="watch" id="watch" aria-label="Watch">
     <h2>📺 WATCH</h2>
     <div class="vbox" id="vbox">
-      <button class="vfacade" id="vFacade" type="button" aria-label="Play video: Don't Panic">
-        <img id="vThumb" src="assets/yt-dont-panic.jpg" alt="" width="640" height="360" loading="lazy">
+      <button class="vfacade" id="vFacade" type="button" aria-label="Play the MaddEra video playlist">
+        <img id="vThumb" src="assets/yt-playlist.jpg" alt="" width="640" height="360" loading="lazy">
         <span class="vplay" aria-hidden="true">▶</span>
-        <span class="vcap"><b id="vTitle">"Don't Panic" — MaddEra</b><span>Tap to load the video from YouTube (privacy mode)</span></span>
+        <span class="vcap"><b id="vTitle">MaddEra · Video playlist</b><span>Tap to load the playlist from YouTube (privacy mode)</span></span>
       </button>
     </div>
-    <div class="vchips" id="vChips"></div>
+    <div class="vchips" id="vChips"><a class="chip linkchip" href="https://www.youtube.com/playlist?list=PLOgdbe-yDQno" target="_blank" rel="noopener" data-ach="yt">▶ OPEN PLAYLIST ON YOUTUBE</a></div>
   </section>
 
   <section class="shop" aria-label="Support MaddEra">
@@ -942,10 +944,10 @@ body.is-live .btn.tw .livepill{display:inline-block}
 
   /* ---------- music: SoundCloud player with a custom track switcher ---------- */
   const SCU = "https://soundcloud.com/gianni-madera-274580725/";
-  // Playlist mode: make a PUBLIC SoundCloud playlist called "My Tracks" (address .../sets/my-tracks).
-  // Whatever is in it shows up here live, no redeploy. Until it exists, the FALLBACK list is used.
+  // Playlist mode: the PUBLIC SoundCloud playlist "Playlist for MaddEra.com" (.../sets/playlist-for-maddera-com).
+  // Whatever is in it shows up here live, no redeploy. If it ever disappears, the FALLBACK list is used.
   const qp = new URLSearchParams(location.search).get("playlist");
-  const PLAYLIST = SCU + "sets/" + (/^[a-z0-9-]{1,60}$/.test(qp || "") ? qp : "my-tracks");
+  const PLAYLIST = SCU + "sets/" + (/^[a-z0-9-]{1,60}$/.test(qp || "") ? qp : "playlist-for-maddera-com");
   const FALLBACK = [{ t: "Don't Panic", s: "dont-panic" }, { t: "Love Fast", s: "love-fast" }];
   let TRACKS = FALLBACK.slice(), mode = "static";
   const npEl = $("#np"); let sc = null, cur = 0, scReady = false, isPlaying = false, switched = false, listed = false, started = false;
@@ -1004,7 +1006,7 @@ body.is-live .btn.tw .livepill{display:inline-block}
     .then(r => startPlayer(r.ok)).catch(() => startPlayer(false));
 
   /* ---------- video: YouTube click-to-load (privacy mode, nothing loads until tapped) ---------- */
-  const VIDEOS = [{ id: "0BB_yo8Pt_U", title: "\"Don't Panic\" — MaddEra" }];
+  const VIDEOS = [{ list: "PLOgdbe-yDQno", title: "MaddEra video playlist" }];
   let vcur = 0;
   const vFacadeHTML = () => $("#vbox").dataset.facade;
   $("#vbox").dataset.facade = $("#vbox").innerHTML;
@@ -1013,7 +1015,7 @@ body.is-live .btn.tw .livepill{display:inline-block}
     const v = VIDEOS[vcur]; try { if (sc && scReady) sc.pause(); } catch {}
     const f = document.createElement("iframe");
     f.title = v.title; f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen"; f.allowFullscreen = true; f.referrerPolicy = "strict-origin-when-cross-origin";
-    f.src = "https://www.youtube-nocookie.com/embed/" + v.id + "?autoplay=1&rel=0&playsinline=1&modestbranding=1";
+    f.src = "https://www.youtube-nocookie.com/embed/" + (v.list ? "videoseries?list=" + v.list + "&" : v.id + "?") + "autoplay=1&rel=0&playsinline=1&modestbranding=1";
     $("#vbox").innerHTML = ""; $("#vbox").appendChild(f); SFX.select(); unlock("cinema");
   }
   function closeVideo() { if ($("#vbox iframe")) { $("#vbox").innerHTML = vFacadeHTML(); bindFacade(); } }
